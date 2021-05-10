@@ -1,13 +1,23 @@
 # socket chap app
 
-### 1. 시작
+### 1. 실행
 
-1. 기본 setting/ts
+```
+// localhost:3090
+npm run dev
+```
 
-2. npm i
+### 2. Code Splitting
 
-3. index.html, tsconfig.json, webpack.config.ts 개인 설정
+```
+npm i @loadable/component
 
-4. npm run build
+npm i @types/loadable__component
+```
 
-5. npm run dev
+```
+import loadable from '@loadable/component';
+
+const Login = loadable(() => import('@pages/login/login'));
+const Signup = loadable(() => import('@pages/signup/signup'));
+```
