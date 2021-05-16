@@ -10,6 +10,7 @@ const Signup = () => {
   const [signUpError, setSignUpError] = useState(false);
   const [signUpSuccess, setSignUpSuccess] = useState(false);
   const [mismatchError, setMismatchError] = useState(false);
+
   const [email, onChangeEmail] = useInput('');
   const [nickname, onChangeNickname] = useInput('');
   const [password, , setPassword] = useInput('');
@@ -59,7 +60,7 @@ const Signup = () => {
 
   return (
     <div id="container">
-      <Header>Sleact</Header>
+      <Header>Chap App</Header>
       <Form onSubmit={onSubmit}>
         <Label id="email-label">
           <span>이메일 주소</span>
