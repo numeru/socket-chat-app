@@ -71,7 +71,7 @@ mutate(newData);
 ### Route
 
 - route를 중첩할 경우, 이전 route의 주소를 포함해야한다.
-- ':'을 통해 주소에 parameter를 전달할 수 있다.
+- ':' 을 통해 주소에 parameter를 전달할 수 있다.
 
 ```js
 // app.tsx
@@ -116,4 +116,14 @@ const Modal: FC<PropsWithChildren<Props>> = ({ show, children, onCloseModal }) =
     </CreateModal>
   );
 };
+```
+
+---
+
+### NavLink
+
+- 해당 Link의 주소와 현재 주소가 같은 경우 특정 class를 부여할 수 있다.
+
+```js
+<NavLink activeClassName="selected" to={`/workspace/${workspace}/channel/${channel.name}`}></NavLink>
 ```

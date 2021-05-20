@@ -30,6 +30,8 @@ import Modal from '@components/modal';
 import { toast } from 'react-toastify';
 import CreateChannelModal from '@components/create-channel-modal/index';
 import InviteWorkspaceModal from '@components/invite-workspace-modal/index';
+import ChannelList from '@components/channel-list';
+import DMList from '@components/dm-list';
 
 const Channel = loadable(() => import('@pages/channel/channel'));
 const DirectMessage = loadable(() => import('@pages/direct-message/direct-message'));
@@ -41,6 +43,8 @@ const Workspace = () => {
   const { data: userData, revalidate, mutate } = useSWR<IUser | false>('/api/users', fetcher);
 
   const { data: channelData } = useSWR<IChannel[]>(userData ? `/api/workspaces/${workspace}/channels` : null, fetcher);
+
+  const { data: memberData } = useSWR<IUser[]>(userData ? `/api/workspaces/${workspace}/members` : null, fetcher);
 
   const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] = useState(false);
   const [showInviteWorkspaceModal, setShowInviteWorkspaceModal] = useState(false);
@@ -160,7 +164,7 @@ const Workspace = () => {
         </Workspaces>
         <Channels>
           <WorkspaceName onClick={toggleWorkspaceModal}>
-            {userData?.Workspaces.find((v) => v.url === workspace)?.name}
+            {userData?.Workspaces?.find((v) => v.url === workspace)?.name}
           </WorkspaceName>
           <MenuScroll>
             <Menu show={showWorkspaceModal} onCloseModal={toggleWorkspaceModal} style={{ top: 95, left: 80 }}>
@@ -171,8 +175,8 @@ const Workspace = () => {
                 <button onClick={onLogout}>로그아웃</button>
               </WorkspaceModal>
             </Menu>
-            {/* <ChannelList />
-            <DMList /> */}
+            <ChannelList />
+            <DMList />
           </MenuScroll>
         </Channels>
         <Chats>
