@@ -3,7 +3,10 @@
 ### 1. 실행
 
 ```
-// localhost:3090
+// front (localhost:3090)
+npm run dev
+
+// back
 npm run dev
 ```
 
@@ -126,4 +129,65 @@ const Modal: FC<PropsWithChildren<Props>> = ({ show, children, onCloseModal }) =
 
 ```js
 <NavLink activeClassName="selected" to={`/workspace/${workspace}/channel/${channel.name}`}></NavLink>
+```
+
+---
+
+### Socket
+
+```
+// v2
+npm i socket.io-client@2
+```
+
+```js
+// socket connect
+const socket = io.connect(url);
+
+// 서버로 data 보내기
+// event: 이벤트 이름
+// args: 전달할 data
+socket.emit(event, args);
+
+// 서버로부터 data 받기
+// event: 이벤트 이름
+// fn: data를 받아 처리하는 함수 ((data) = {})
+socket.on(event, fn);
+
+// socket disconnect
+socket.disconnect();
+```
+
+- 특정 집단 안에서만 data를 주고받을 경우, connect 할 때 url을 설정하여 범위를 지정해주어야한다.
+
+```js
+// useSocket
+const sockets: { [key: string]: SocketIOClient.Socket } = {};
+
+const useSocket = (workspace?: string): [SocketIOClient.Socket | undefined, () => void] => {
+  const disconnect = useCallback(() => {
+    if (workspace && sockets[workspace]) {
+      sockets[workspace].disconnect();
+      delete sockets[workspace];
+    }
+  }, [workspace]);
+
+  if (!workspace) {
+    return [undefined, disconnect];
+  }
+
+  if (!sockets[workspace]) {
+    sockets[workspace] = io.connect(`${backUrl}/ws-${workspace}`, {
+      transports: ['websocket'],
+    });
+    console.info('create socket', workspace, sockets[workspace]);
+  }
+
+  return [sockets[workspace], disconnect];
+};
+
+export default useSocket;
+
+// 사용
+const [socket, disconnect] = useSocket(workspace);
 ```
