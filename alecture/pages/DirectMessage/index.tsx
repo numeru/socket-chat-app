@@ -1,8 +1,8 @@
-import ChatBox from '@components/chat-box';
-import ChatList from '@components/chat-list';
+import ChatBox from '@components/ChatBox';
+import ChatList from '@components/ChatList';
 import useInput from '@hooks/useInput';
 import useSocket from '@hooks/useSocket';
-import { Container, Header } from '@pages/direct-message/styles';
+import { Container, Header, DragOver } from '@pages/DirectMessage/styles';
 import { IDM } from '@typings/db';
 import fetcher from '@utils/fetcher';
 import makeSection from '@utils/makeSection';
@@ -150,7 +150,7 @@ const DirectMessage = () => {
       </Header>
       <ChatList chatSections={chatSections} ref={scrollbarRef} setSize={setSize} isReachingEnd={isReachingEnd} />
       <ChatBox chat={chat} onChangeChat={onChangeChat} onSubmitForm={onSubmitForm} />
-      {/* {dragOver && <DragOver>업로드!</DragOver>} */}
+      {dragOver && <DragOver>업로드!</DragOver>}
     </Container>
   );
 };

@@ -1,5 +1,5 @@
 import useInput from '@hooks/useInput';
-import { Button, Error, Form, Header, Input, Label, LinkContainer } from '@pages/signup/styles';
+import { Success, Form, Error, Label, Input, LinkContainer, Button, Header } from '@pages/SignUp/styles';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
 import React, { useCallback, useState } from 'react';
@@ -7,7 +7,8 @@ import { Link, Redirect } from 'react-router-dom';
 import useSWR from 'swr';
 
 const LogIn = () => {
-  const { data: userData, error, revalidate, mutate } = useSWR('/api/users', fetcher);
+  const { data, error, revalidate, mutate } = useSWR('/api/users', fetcher);
+
   const [logInError, setLogInError] = useState(false);
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
@@ -33,13 +34,23 @@ const LogIn = () => {
     [email, password],
   );
 
-  if (!error && userData) {
+  if (data === undefined) {
+    return <div>로딩중...</div>;
+  }
+
+  if (data) {
     return <Redirect to="/workspace/sleact/channel/일반" />;
   }
 
+  // console.log(error, userData);
+  // if (!error && userData) {
+  //   console.log('로그인됨', userData);
+  //   return <Redirect to="/workspace/sleact/channel/일반" />;
+  // }
+
   return (
     <div id="container">
-      <Header>Chap App</Header>
+      <Header>Sleact</Header>
       <Form onSubmit={onSubmit}>
         <Label id="email-label">
           <span>이메일 주소</span>

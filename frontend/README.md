@@ -102,7 +102,7 @@ const { workspace } = params;
   모달창 밖을 클릭 했을 때 모달창이 닫히도록 할 수 있다.
 
 ```js
-const Modal: FC<PropsWithChildren<Props>> = ({ show, children, onCloseModal }) => {
+const Modal = ({ show, children, onCloseModal }: Props) => {
   const stopPropagation = useCallback((e) => {
     e.stopPropagation();
   }, []);
@@ -154,6 +154,9 @@ socket.emit(event, args);
 // fn: data를 받아 처리하는 함수 ((data) = {})
 socket.on(event, fn);
 
+// on 과 짝지어서 사용.
+socket.off(event);
+
 // socket disconnect
 socket.disconnect();
 ```
@@ -190,4 +193,29 @@ export default useSocket;
 
 // 사용
 const [socket, disconnect] = useSocket(workspace);
+
+useEffect(() => {
+  socket?.on('event', (data) => {
+    //...
+  });
+  return () => {
+    socket?.off('event');
+  };
+}, [socket]);
+```
+
+---
+
+### scrollbar
+
+```
+npm i react-custom-scrollbars
+```
+
+```js
+const scrollbarRef = useRef < Scrollbars > null;
+
+<Scrollbars autoHide ref={scrollRef} onScrollFrame={onScroll}>
+  // ...
+</Scrollbars>;
 ```

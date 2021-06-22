@@ -1,4 +1,4 @@
-import { ChatArea, EachMention, Form, MentionsTextarea, SendButton, Toolbox } from '@components/chat-box/styles';
+import { ChatArea, EachMention, Form, MentionsTextarea, SendButton, Toolbox } from '@components/ChatBox/styles';
 import { IUser } from '@typings/db';
 import fetcher from '@utils/fetcher';
 import React, { useCallback, useEffect, useRef, VFC } from 'react';
@@ -8,12 +8,12 @@ import { useParams } from 'react-router';
 import useSWR from 'swr';
 import gravatar from 'gravatar';
 
-type Props = {
+interface Props {
   chat: string;
   onSubmitForm: (e: any) => void;
   onChangeChat: (e: any) => void;
   placeholder?: string;
-};
+}
 const ChatBox: VFC<Props> = ({ chat, onSubmitForm, onChangeChat, placeholder }) => {
   const { workspace } = useParams<{ workspace: string }>();
   const { data: userData, error, revalidate, mutate } = useSWR<IUser | false>('/api/users', fetcher, {

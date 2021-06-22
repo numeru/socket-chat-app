@@ -21,11 +21,9 @@ export const MentionsTextarea = styled(MentionsInput)`
   font-size: 15px;
   padding: 8px 9px;
   width: 100%;
-
   & strong {
     background: skyblue;
   }
-
   & textarea {
     height: 44px;
     padding: 9px 10px !important;
@@ -35,7 +33,6 @@ export const MentionsTextarea = styled(MentionsInput)`
     line-height: 22px;
     border: none;
   }
-
   & ul {
     border: 1px solid lightgray;
     max-height: 200px;
@@ -72,11 +69,9 @@ export const EachMention = styled.button<{ focus: boolean }>`
   align-items: center;
   color: rgb(28, 29, 28);
   width: 100%;
-
   & img {
     margin-right: 5px;
   }
-
   ${({ focus }) =>
     focus &&
     `
