@@ -1,4 +1,4 @@
-# socket chap app
+# socket chat app
 
 ### 1. 실행
 
@@ -206,7 +206,7 @@ useEffect(() => {
 
 ---
 
-### scrollbar
+### Scrollbar
 
 ```
 npm i react-custom-scrollbars
@@ -241,7 +241,7 @@ scrollbarRef.current?.scrollToBottom();
 
 ---
 
-### forwardRef
+### ForwardRef
 
 - ref를 상위 컴포넌트에서 만들어 자식 컴포넌트로 전달해주고 싶을 때 사용한다.
 
@@ -260,7 +260,7 @@ export default ChatList;
 
 ```
 
-### useSWRInfinite
+### UseSWRInfinite
 
 ```js
 // setSize : index(page 수)를 바꿔준다.
@@ -301,7 +301,7 @@ const isReachingEnd = isEmpty || (chatData && chatData[chatData.length - 1]?.len
 
 ---
 
-### optimistic UI
+### Optimistic UI
 
 - 사용성을 높이기 위해, 먼저 눈에 보이는 data를 변경한 뒤 서버에 요청을 보내 수정한다.
 
