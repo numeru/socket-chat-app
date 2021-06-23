@@ -212,10 +212,121 @@ useEffect(() => {
 npm i react-custom-scrollbars
 ```
 
-```js
-const scrollbarRef = useRef < Scrollbars > null;
+```ts
+const scrollbarRef = useRef<Scrollbars>(null);
 
 <Scrollbars autoHide ref={scrollRef} onScrollFrame={onScroll}>
   // ...
 </Scrollbars>;
+
+// scroll 될 때 실행되는 메서드
+const onScroll = useCallback(
+  (values) => {
+    if (values.scrollTop === 0 && !isReachingEnd) {
+      console.log('가장 위');
+      setSize((prevSize) => prevSize + 1).then(() => {
+        const current = (ref as MutableRefObject<Scrollbars>)?.current;
+        if (current) {
+          current.scrollTop(current.getScrollHeight() - values.scrollHeight);
+        }
+      });
+    }
+  },
+  [ref, isReachingEnd, setSize],
+);
+
+scrollbarRef.current?.scrollTop(current.getScrollHeight() - values.scrollHeight);
+scrollbarRef.current?.scrollToBottom();
+```
+
+---
+
+### forwardRef
+
+- ref를 상위 컴포넌트에서 만들어 자식 컴포넌트로 전달해주고 싶을 때 사용한다.
+
+```js
+// direct-message.tsx
+const scrollbarRef = useRef<Scrollbars>(null);
+
+<ChatList chatSections={chatSections} setSize={setSize} isReachingEnd={isReachingEnd} ref={scrollbarRef}/>
+
+// chat-list.tsx
+const ChatList = forwardRef<Props, Scrollbars>(({ chatSections, setSize, isReachingEnd }, ref) => {
+   //...
+});
+
+export default ChatList;
+
+```
+
+### useSWRInfinite
+
+```js
+// setSize : index(page 수)를 바꿔준다.
+const { data: chatData, mutate: mutateChat, revalidate, setSize } = useSWRInfinite<IDM[]>(
+  (index) => `/api/workspaces/${workspace}/dms/${id}/chats?perPage=20&page=${index + 1}`,
+  fetcher,
+);
+
+setSize((prevSize) => prevSize + 1).then(() => {
+  //...
+});
+```
+
+- index에 따른 data를 받아온다.
+
+```
+// index = 0
+[{ id: 1 }, { id: 2 }]
+
+// index = 1
+[[{ id: 3 }, { id: 4 }], [{ id: 1 }, { id: 2 }]];
+```
+
+- 2차원 배열의 형태로 data가 누적되므로 적절히 가공하여 준다.
+
+```js
+chatData.flat();
+```
+
+- data를 다 받아왔는지 확인하는 절차가 필수적이다.
+
+```js
+// isEmpty: 가져온 data의 수가 0이면 true.
+// isReachingEnd: 가져온 data의 수가 한번에 가져오는 data의 수보다 작은 경우를 true.
+const isEmpty = chatData?.[0]?.length === 0;
+const isReachingEnd = isEmpty || (chatData && chatData[chatData.length - 1]?.length < 20) || false;
+```
+
+---
+
+### optimistic UI
+
+- 사용성을 높이기 위해, 먼저 눈에 보이는 data를 변경한 뒤 서버에 요청을 보내 수정한다.
+
+```js
+const savedChat = chat;
+
+mutateChat((prevChatData) => {
+  prevChatData?.[0].unshift({
+    id: (chatData[0][0]?.id || 0) + 1,
+    content: savedChat,
+    SenderId: myData.id,
+    Sender: myData,
+    ReceiverId: userData.id,
+    Receiver: userData,
+    createdAt: new Date(),
+  });
+  return prevChatData;
+}, false);
+
+axios
+  .post(`/api/workspaces/${workspace}/dms/${id}/chats`, {
+    content: chat,
+  })
+  .then(() => {
+    revalidate();
+  })
+  .catch(console.error);
 ```
