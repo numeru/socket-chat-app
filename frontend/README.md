@@ -252,7 +252,7 @@ const scrollbarRef = useRef<Scrollbars>(null);
 <ChatList chatSections={chatSections} setSize={setSize} isReachingEnd={isReachingEnd} ref={scrollbarRef}/>
 
 // chat-list.tsx
-const ChatList = forwardRef<Props, Scrollbars>(({ chatSections, setSize, isReachingEnd }, ref) => {
+const ChatList = forwardRef<Props, Scrollbars>((ref, { chatSections, setSize, isReachingEnd }) => {
    //...
 });
 
